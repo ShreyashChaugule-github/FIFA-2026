@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 
 const VENUES = [
@@ -67,11 +68,13 @@ function VenueCard({ venue, index }) {
   return (
     <div className={`flex flex-col border-b md:border-b-0 monad-border ${index % 2 === 0 ? 'md:border-r' : ''}`}>
       <div className="h-48 bg-neutral-100 relative border-b monad-border overflow-hidden group">
-        <img
+        <Image
           src={venue.image}
           alt={venue.name}
-          className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
-          onError={e => { e.target.style.display = 'none'; }}
+          fill
+          sizes="(max-width: 768px) 100vw, 25vw"
+          className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+          onError={() => {}}
         />
         <div className="absolute top-3 right-3 bg-white border monad-border px-2 py-1 font-mono text-[10px] font-bold tracking-wider uppercase text-black">
           {venue.highlight}

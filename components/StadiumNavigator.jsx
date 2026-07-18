@@ -77,7 +77,7 @@ export default function StadiumNavigator() {
     script.async = true;
     script.onload = () => {
       if (!iframeRef.current) return;
-      // eslint-disable-next-line no-undef
+       
       const client = new window.Sketchfab(iframeRef.current);
       clientRef.current = client;
 
@@ -159,7 +159,7 @@ export default function StadiumNavigator() {
         <div className="flex flex-col lg:flex-row-reverse min-h-[90vh] border-x monad-border bg-white">
 
           {/* Right Column: Sticky Sidebar */}
-          <div className="w-full lg:w-1/3 lg:sticky lg:top-[60px] h-auto lg:h-[calc(100vh-60px)] p-6 md:p-10 border-b lg:border-b-0 lg:border-l monad-border flex flex-col overflow-y-auto">
+          <div className="w-full lg:w-1/3 lg:sticky lg:top-15 h-auto lg:h-[calc(100vh-60px)] p-6 md:p-10 border-b lg:border-b-0 lg:border-l monad-border flex flex-col overflow-y-auto">
             <div className="mb-8">
               <div className="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-6">
                 / 3D Navigator
@@ -201,7 +201,7 @@ export default function StadiumNavigator() {
             </div>
 
             {/* AI Route Output */}
-            <div className="flex-1 p-5 bg-neutral-50 border monad-border rounded-lg min-h-[140px]">
+            <div className="flex-1 p-5 bg-neutral-50 border monad-border rounded-lg min-h-35">
               <div className="font-mono text-xs text-neutral-400 mb-3 uppercase flex items-center gap-2">
                 🤖 AI Route Instructions
               </div>

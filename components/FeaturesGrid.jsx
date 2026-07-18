@@ -1,5 +1,4 @@
 'use client';
-import { useRef, useEffect } from 'react';
 
 const FEATURES = [
   {
@@ -49,7 +48,7 @@ export default function FeaturesGrid() {
         <div className="flex flex-col lg:flex-row border-x monad-border overflow-hidden">
           
           {/* Left: Sticky Intro */}
-          <div className="w-full lg:w-1/3 p-8 md:p-12 border-b lg:border-b-0 lg:border-r monad-border flex flex-col gap-6 lg:sticky lg:top-[60px] lg:h-[calc(100vh-60px)] bg-neutral-50 justify-center">
+          <div className="w-full lg:w-1/3 p-8 md:p-12 border-b lg:border-b-0 lg:border-r monad-border flex flex-col gap-6 lg:sticky lg:top-15 lg:h-[calc(100vh-60px)] bg-neutral-50 justify-center">
             <div className="font-mono text-xs uppercase text-neutral-400">/ Six Pillars</div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-black leading-tight">
               Stadium<br/>Intelligence

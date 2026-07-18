@@ -32,18 +32,18 @@ export default function Home() {
   // Not signed in → show login page + footer
   if (!user) {
     return (
-      <>
+      <main id="main-content" tabIndex="-1">
         <LoginPage />
         <Footer />
-      </>
+      </main>
     );
   }
 
   // Signed in → show full dashboard
   return (
-    <main>
+    <main id="main-content" tabIndex="-1">
       <Navbar />
-      <div className="pt-[57px]">
+      <div className="pt-14.25">
         <LiveDashboard />
         <VenuesSection />
         <AICommandCenter />

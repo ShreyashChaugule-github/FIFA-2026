@@ -36,7 +36,7 @@ export default function AICommandCenter() {
       });
       const data = await res.json();
       setMessages(prev => [...prev, { role: 'assistant', text: data.response || 'No response.' }]);
-    } catch (e) {
+    } catch {
       setMessages(prev => [...prev, { role: 'assistant', text: '⚠️ Connection error. Please try again.' }]);
     } finally {
       setLoading(false);
@@ -49,7 +49,7 @@ export default function AICommandCenter() {
         <div className="flex flex-col lg:flex-row min-h-[80vh] border-x monad-border bg-white">
           
           {/* Left Column: Sticky Sidebar */}
-          <div className="w-full lg:w-1/3 lg:sticky lg:top-[60px] h-auto lg:h-[calc(100vh-60px)] p-6 md:p-10 border-b lg:border-b-0 lg:border-r monad-border flex flex-col justify-between">
+          <div className="w-full lg:w-1/3 lg:sticky lg:top-15 h-auto lg:h-[calc(100vh-60px)] p-6 md:p-10 border-b lg:border-b-0 lg:border-r monad-border flex flex-col justify-between">
             <div>
               <div className="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-6">
                 / AI Command Center

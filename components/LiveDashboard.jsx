@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-function MetricGauge({ value, max, label, sublabel, type }) {
+function MetricGauge({ value, max, label, sublabel }) {
   const pct = Math.min((value / max) * 100, 100);
   
   return (
@@ -146,7 +146,7 @@ export default function LiveDashboard() {
                     {aiLoading ? 'Analyzing...' : 'Refresh'}
                   </button>
                 </div>
-                <div className="bg-white p-4 border monad-border rounded text-sm text-black min-h-[80px]">
+                <div className="bg-white p-4 border monad-border rounded text-sm text-black min-h-20">
                   {aiAlert || 'Click refresh to analyze current dashboard metrics and generate an operational strategy.'}
                 </div>
               </div>

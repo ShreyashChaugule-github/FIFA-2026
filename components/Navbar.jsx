@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 
 export default function Navbar() {
@@ -47,9 +48,11 @@ export default function Navbar() {
         {/* User + Sign Out */}
         <div className="flex items-center gap-3">
           {user?.photoURL ? (
-            <img
+            <Image
               src={user.photoURL}
               alt={user.displayName || 'User'}
+              width={32}
+              height={32}
               className="w-8 h-8 rounded-full border border-neutral-200 object-cover"
             />
           ) : (
@@ -57,7 +60,7 @@ export default function Navbar() {
               {user?.email?.[0]?.toUpperCase() || 'U'}
             </div>
           )}
-          <span className="hidden md:block font-mono text-xs text-neutral-500 truncate max-w-[140px]">
+          <span className="hidden md:block font-mono text-xs text-neutral-500 truncate max-w-35">
             {user?.displayName || user?.email}
           </span>
           <button
