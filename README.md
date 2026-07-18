@@ -1,34 +1,74 @@
 # StadiumIQ
 
-StadiumIQ is a polished, AI-powered experience designed for FIFA World Cup 2026 fans, organizers, volunteers, and staff. The app brings together live operational intelligence, multilingual support, venue discovery, and immersive stadium navigation in a single interface.
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase" />
+  <img src="https://img.shields.io/badge/Gemini-AI-8E75FF?style=for-the-badge&logo=google&logoColor=white" alt="Gemini" />
+</p>
 
-## What the project does
+<p align="center">
+  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/hero.png" alt="StadiumIQ banner" width="100%" />
+</p>
 
-- Provides a modern landing experience for the FIFA 2026 ecosystem
-- Offers an AI command center powered by Google Gemini
-- Supports role-based guidance for fans, organizers, volunteers, and staff
-- Includes a live operations dashboard with alerts and transport insights
-- Showcases iconic stadium venues and an interactive 3D stadium navigator
-- Uses Firebase Authentication for secure sign-in and account access
+<p align="center">
+  <strong>AI-powered stadium intelligence for FIFA World Cup 2026</strong><br/>
+  Built for fans, organizers, volunteers, and staff who need fast, accessible, multilingual support.
+</p>
 
-## Tech stack
+## 🚀 What this project does
 
-- Next.js 16
-- React 19
-- Firebase Authentication
-- Google Gemini AI
-- Tailwind CSS
-- ESLint and Node-based tests
+- 🏟️ Delivers a premium FIFA 2026 experience with live operations, venue discovery, and navigation
+- 🤖 Powers an AI command center with Google Gemini for personalized support
+- 👥 Supports role-based guidance for fans, organizers, volunteers, and staff
+- 📊 Includes a live dashboard with alerts, transport insights, and crowd-awareness context
+- 🧭 Offers immersive stadium guidance through a 3D-inspired navigator experience
+- 🔐 Uses Firebase Authentication for secure account access
 
-## Project structure
+## 🧰 Tech stack
 
-- app/ — main routes and API endpoints
-- components/ — reusable UI sections for the dashboard and experience
+- ⚛️ Next.js 16
+- ⚛️ React 19
+- 🔥 Firebase Authentication
+- 🤖 Google Gemini AI
+- 🎨 Tailwind CSS
+- ✅ ESLint and Node-based test coverage
+
+## 🏗️ Architecture flow
+
+```text
+User / Fan / Staff / Organizer
+            │
+            ▼
+   Authentication Layer
+      (Firebase Auth)
+            │
+            ▼
+   Frontend Experience
+  (Next.js + React UI)
+            │
+            ├── Live Dashboard
+            ├── AI Command Center
+            ├── Stadium Navigator
+            └── Venue Explorer
+            │
+            ▼
+   AI / Data Layer
+ (Gemini API + Prompt Validation)
+            │
+            ▼
+   Response to User
+```
+
+## 📁 Project structure
+
+- app/ — app routes, layout, and API endpoints
+- components/ — reusable UI sections for the experience
 - context/ — authentication context
 - lib/ — Firebase and Gemini integration helpers
-- tests/ — regression tests for the AI prompt validation flow
+- tests/ — regression tests for the AI flow
 
-## Getting started
+## ▶️ Getting started
 
 ### 1. Install dependencies
 
@@ -44,7 +84,7 @@ Create a local environment file with the required values:
 cp .env.local .env.local
 ```
 
-Add your Firebase and Gemini credentials, for example:
+Add your Firebase and Gemini credentials:
 
 ```env
 NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
@@ -64,7 +104,7 @@ npm run dev
 
 Open http://localhost:3000 to view the app.
 
-## Available scripts
+## 🛠️ Available scripts
 
 ```bash
 npm run dev      # start the development server
@@ -74,7 +114,7 @@ npm run lint     # lint the project
 npm test         # run the automated tests
 ```
 
-## Quality checks
+## ✅ Quality checks
 
 The project has been verified with:
 
@@ -84,7 +124,7 @@ npm test
 npm run build
 ```
 
-## Notes
+## 💡 Notes
 
-The AI features are designed to work best when valid Gemini credentials are configured. If no API key is present, the app will fall back to a demo-style response for safe local testing.
+The AI features work best when valid Gemini credentials are configured. If no API key is present, the app falls back to a demo-style response for safe local testing.
 
