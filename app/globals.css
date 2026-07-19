@@ -60,3 +60,13 @@
   background-image: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.15) 0.75px, transparent 0.75px);
   background-size: 17.5px 17.5px;
 }
+
+/* prefers-reduced-motion: reduce */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useGeminiRequest } from '@/hooks/useGeminiRequest';
 
 const VENUES = [
   {
@@ -43,25 +44,19 @@ const VENUES = [
 
 function VenueCard({ venue, index }) {
   const [aiInfo, setAiInfo] = useState('');
-  const [aiLoading, setAiLoading] = useState(false);
+  const { request, loading: aiLoading } = useGeminiRequest();
 
   const getAIInfo = async () => {
-    setAiLoading(true);
     try {
-      const res = await fetch('/api/gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: `Give me 1 brief exciting fact about ${venue.name} in ${venue.city} as a FIFA 2026 venue. Max 20 words.`,
-          context: 'fan', language: 'en', type: 'general',
-        }),
+      const result = await request({
+        message: `Give me 1 brief exciting fact about ${venue.name} in ${venue.city} as a FIFA 2026 venue. Max 20 words.`,
+        context: 'fan',
+        language: 'en',
+        type: 'general',
       });
-      const data = await res.json();
-      setAiInfo(data.response);
+      if (result) setAiInfo(result);
     } catch {
       setAiInfo('AI venue info temporarily unavailable.');
-    } finally {
-      setAiLoading(false);
     }
   };
 
@@ -70,10 +65,13 @@ function VenueCard({ venue, index }) {
       <div className="h-48 bg-neutral-100 relative border-b monad-border overflow-hidden group">
         <Image
           src={venue.image}
-          alt={venue.name}
+          alt={`${venue.name} stadium exterior in ${venue.city}, ${venue.country}`}
           fill
-          sizes="(max-width: 768px) 100vw, 25vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUEA/8QAIRAAAQMEAwEAAAAAAAAAAAAAAQIDBAAFERIhMWH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AoNW3JdYuEeHLmRYcZlaVOKcWlCEp2O5J2HeuefuYtMeBFiNzIbYSgJS04soSBsBtsk4GKUoA/9k="
+          priority={index === 0}
           onError={() => {}}
         />
         <div className="absolute top-3 right-3 bg-white border monad-border px-2 py-1 font-mono text-[10px] font-bold tracking-wider uppercase text-black">
@@ -103,7 +101,7 @@ function VenueCard({ venue, index }) {
 
         <div>
           {aiInfo && (
-            <div className="mb-4 p-3 bg-neutral-50 border monad-border rounded text-xs text-neutral-700 italic">
+            <div role="status" aria-live="polite" className="mb-4 p-3 bg-neutral-50 border monad-border rounded text-xs text-neutral-700 italic">
               🤖 {aiInfo}
             </div>
           )}

@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { useGeminiRequest } from '@/hooks/useGeminiRequest';
 
 const LANGUAGES = [
   { code: 'en', label: 'English', flag: '🇺🇸', native: 'English' },
@@ -22,20 +23,16 @@ export default function MultilingualAssistant() {
   const [inputText, setInputText] = useState('');
   const [targetLang, setTargetLang] = useState('es');
   const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { request, loading } = useGeminiRequest();
   const [activePhrase, setActivePhrase] = useState(null);
 
   const translate = async (text, lang) => {
     if (!text.trim()) return;
-    setLoading(true);
     setResult(null);
     const targetLangObj = LANGUAGES.find(l => l.code === lang);
     try {
-      const res = await fetch('/api/gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: `Translate the following text to ${targetLangObj?.label} (${targetLangObj?.native}) for a FIFA World Cup 2026 stadium context. Also provide:
+      const resultText = await request({
+        message: `Translate the following text to ${targetLangObj?.label} (${targetLangObj?.native}) for a FIFA World Cup 2026 stadium context. Also provide:
 1. The translation
 2. A phonetic pronunciation guide (romanized)
 3. One key cultural tip for stadium interactions
@@ -46,17 +43,15 @@ Format your response as:
 TRANSLATION: [translated text]
 PRONUNCIATION: [phonetic guide]
 CULTURAL TIP: [brief tip]`,
-          context: 'fan',
-          language: lang,
-          type: 'general',
-        }),
+        context: 'fan',
+        language: lang,
+        type: 'general',
       });
-      const data = await res.json();
-      setResult({ raw: data.response, targetLang: targetLangObj });
+      if (resultText) {
+        setResult({ raw: resultText, targetLang: targetLangObj });
+      }
     } catch {
       setResult({ raw: 'Translation service unavailable.', targetLang: targetLangObj });
-    } finally {
-      setLoading(false);
     }
   };
 

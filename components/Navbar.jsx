@@ -31,9 +31,9 @@ export default function Navbar() {
           {[
             { label: 'AI Center', id: 'ai-center' },
             { label: 'Navigator', id: 'navigator' },
-            { label: 'Dashboard', id: 'dashboard' },
-            { label: 'Features', id: 'features' },
-            { label: 'Venues', id: 'venues' },
+            { label: 'Schedule', id: 'schedule' },
+            { label: 'Volunteer', id: 'volunteer' },
+            { label: 'Emergency', id: 'emergency' },
           ].map((item) => (
             <button
               key={item.id}

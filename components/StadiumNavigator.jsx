@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useGeminiRequest } from '@/hooks/useGeminiRequest';
 
 // Camera positions for each hotspot in the 3D stadium
 // Each entry is [eye_x, eye_y, eye_z, target_x, target_y, target_z]
@@ -66,7 +67,7 @@ export default function StadiumNavigator() {
   const clientRef = useRef(null);
   const [viewerReady, setViewerReady] = useState(false);
   const [activeHotspot, setActiveHotspot] = useState(null);
-  const [aiLoading, setAiLoading] = useState(false);
+  const { request, loading: aiLoading } = useGeminiRequest();
   const [navInstructions, setNavInstructions] = useState('');
   const [navStatus, setNavStatus] = useState('Initializing 3D viewer...');
 
@@ -134,32 +135,22 @@ export default function StadiumNavigator() {
       return;
     }
 
-    setAiLoading(true);
-    setNavInstructions('');
-
     try {
-      const res = await fetch('/api/gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: `Generate exactly 3 short bulleted walking directions from the Main Gates (A-D) to the ${hotspot.name} using this stadium layout:
+      const result = await request({
+        message: `Generate exactly 3 short bulleted walking directions from the Main Gates (A-D) to the ${hotspot.name} using this stadium layout:
 - Main Gates (A-D) are at Ground Level, East Concourse.
 - Medical Center is at Ground Level, West Concourse (directly opposite the Main Gates).
 - Concessions are at Level 2, North Concourse (turn right from gates, go to Section 130, take Escalator 3 up).
 - VIP Entrance is at Ground Level, South Concourse (turn left from gates, walk past Section 102).
 - Merchandise is at Level 2, East Concourse (take the East Escalator near Gate B up to Level 2).
 MAXIMUM 8 WORDS PER BULLET. NO INTRO OR OUTRO TEXT.`,
-          context: 'fan',
-          language: 'en',
-          type: 'navigation',
-        }),
+        context: 'fan',
+        language: 'en',
+        type: 'navigation',
       });
-      const data = await res.json();
-      setNavInstructions(data.response);
+      if (result) setNavInstructions(result);
     } catch {
       setNavInstructions('Navigation service unavailable. Please follow stadium signage.');
-    } finally {
-      setAiLoading(false);
     }
   };
 
@@ -248,9 +239,10 @@ MAXIMUM 8 WORDS PER BULLET. NO INTRO OR OUTRO TEXT.`,
                 </div>
               </div>
             )}
+            <p className="sr-only">Interactive 3D model of the FIFA 2026 stadium.</p>
             <iframe
               ref={iframeRef}
-              title="Modern Stadium"
+              title={`3D interactive view of FIFA 2026 stadium focused on ${activeHotspot || 'overview'}`}
               id="sketchfab-stadium-iframe"
               frameBorder="0"
               allowFullScreen

@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { useGeminiRequest } from '@/hooks/useGeminiRequest';
 
 export default function AICommandCenter() {
   const [context, setContext] = useState('fan');
@@ -7,7 +8,8 @@ export default function AICommandCenter() {
     { role: 'assistant', text: 'Welcome to StadiumIQ. I am the Gemini-powered intelligence assistant for FIFA 2026. How can I assist you today?' }
   ]);
   const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [announcement, setAnnouncement] = useState('');
+  const { request, loading } = useGeminiRequest();
   const scrollRef = useRef(null);
 
   const SUGGESTIONS = {
@@ -26,20 +28,14 @@ export default function AICommandCenter() {
     const userMsg = { role: 'user', text };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
-    setLoading(true);
 
     try {
-      const res = await fetch('/api/gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, context, type: 'general' })
-      });
-      const data = await res.json();
-      setMessages(prev => [...prev, { role: 'assistant', text: data.response || 'No response.' }]);
+      const result = await request({ message: text, context, type: 'general' });
+      if (result) {
+        setMessages(prev => [...prev, { role: 'assistant', text: result }]);
+      }
     } catch {
       setMessages(prev => [...prev, { role: 'assistant', text: '⚠️ Connection error. Please try again.' }]);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -47,6 +43,7 @@ export default function AICommandCenter() {
     <section id="ai-center" className="w-full bg-neutral-50 relative border-b monad-border">
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row min-h-[80vh] border-x monad-border bg-white">
+          <div role="status" aria-live="polite" className="sr-only">{announcement}</div>
           
           {/* Left Column: Sticky Sidebar */}
           <div className="w-full lg:w-1/3 lg:sticky lg:top-15 h-auto lg:h-[calc(100vh-60px)] p-6 md:p-10 border-b lg:border-b-0 lg:border-r monad-border flex flex-col justify-between">
@@ -65,7 +62,11 @@ export default function AICommandCenter() {
                 {['fan', 'organizer', 'volunteer', 'staff'].map(role => (
                   <button
                     key={role}
-                    onClick={() => { setContext(role); setMessages([{ role: 'assistant', text: `Context switched to ${role.toUpperCase()}. How can I help you?` }]); }}
+                    onClick={() => { 
+                      setContext(role); 
+                      setMessages([{ role: 'assistant', text: `Context switched to ${role.toUpperCase()}. How can I help you?` }]); 
+                      setAnnouncement(`Context switched to ${role} mode`);
+                    }}
                     aria-pressed={context === role}
                     className={`text-left px-4 py-3 rounded-md font-mono uppercase text-sm border transition-all ${context === role ? 'border-black bg-black text-white' : 'border-neutral-200 text-black hover:bg-neutral-50'}`}
                   >
@@ -83,7 +84,14 @@ export default function AICommandCenter() {
           {/* Right Column: Chat Interface */}
           <div className="w-full lg:w-2/3 bg-white flex flex-col h-[70vh] lg:h-[calc(100vh-60px)] relative">
             {/* Chat Area */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-10 flex flex-col gap-6">
+            <div 
+              ref={scrollRef} 
+              role="log"
+              aria-live="polite"
+              aria-label="Chat messages"
+              aria-relevant="additions"
+              className="flex-1 overflow-y-auto p-6 md:p-10 flex flex-col gap-6"
+            >
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] p-4 rounded-xl text-sm leading-relaxed ${msg.role === 'user' ? 'bg-black text-white rounded-br-sm' : 'bg-neutral-100 text-black rounded-bl-sm border monad-border'}`}>
@@ -93,9 +101,10 @@ export default function AICommandCenter() {
                 </div>
               ))}
               {loading && (
-                <div className="flex justify-start">
+                <div role="status" aria-label="Loading AI response" className="flex justify-start">
                   <div className="max-w-[85%] p-4 rounded-xl bg-neutral-100 border monad-border text-black rounded-bl-sm">
-                    <span className="animate-pulse">Analyzing...</span>
+                    <span className="animate-pulse" aria-hidden="true">Analyzing...</span>
+                    <span className="sr-only">StadiumIQ AI is processing your request</span>
                   </div>
                 </div>
               )}
@@ -105,7 +114,12 @@ export default function AICommandCenter() {
             <div className="p-6 md:p-10 border-t monad-border bg-neutral-50">
               <div className="flex flex-wrap gap-2 mb-4">
                 {SUGGESTIONS[context].map((s, i) => (
-                  <button key={i} onClick={() => handleSend(s)} className="text-xs font-mono bg-white border monad-border px-3 py-1.5 rounded-full hover:border-black transition-colors">
+                  <button 
+                    key={i} 
+                    onClick={() => handleSend(s)} 
+                    aria-label={`Send suggestion: ${s}`}
+                    className="text-xs font-mono bg-white border monad-border px-3 py-1.5 rounded-full hover:border-black transition-colors"
+                  >
                     {s}
                   </button>
                 ))}

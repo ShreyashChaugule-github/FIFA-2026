@@ -1,6 +1,14 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useGeminiRequest } from '@/hooks/useGeminiRequest';
 
+/**
+ * MetricGauge — displays a labeled progress bar for crowd density metrics.
+ * @param {number} value - Current value
+ * @param {number} max - Maximum capacity value
+ * @param {string} label - Primary label
+ * @param {string} [sublabel] - Optional sub-label
+ */
 function MetricGauge({ value, max, label, sublabel }) {
   const pct = Math.min((value / max) * 100, 100);
   
@@ -19,6 +27,7 @@ function MetricGauge({ value, max, label, sublabel }) {
         <div 
           className={`h-full absolute left-0 top-0 transition-all duration-1000 ease-out ${pct > 85 ? 'bg-red-500' : pct > 65 ? 'bg-yellow-500' : 'bg-black'}`} 
           style={{ width: `${pct}%` }} 
+          aria-hidden="true"
         />
       </div>
     </div>
@@ -40,7 +49,7 @@ const TRANSPORT = [
 export default function LiveDashboard() {
   const [time, setTime] = useState(new Date());
   const [aiAlert, setAiAlert] = useState('');
-  const [aiLoading, setAiLoading] = useState(false);
+  const { request, loading: aiLoading } = useGeminiRequest();
 
   const [metrics, setMetrics] = useState({
     gateA: 52400, gateB: 8200, gateC: 9800, gateD: 11600, totalCap: 82500,
@@ -57,26 +66,22 @@ export default function LiveDashboard() {
     return () => { clearInterval(t); clearInterval(m); };
   }, []);
 
-  const totalAttendance = metrics.gateA + metrics.gateB + metrics.gateC + metrics.gateD;
+  const totalAttendance = useMemo(
+    () => metrics.gateA + metrics.gateB + metrics.gateC + metrics.gateD,
+    [metrics]
+  );
 
   const getAIRecommendation = async () => {
-    setAiLoading(true);
-    setAiAlert('');
     try {
-      const res = await fetch('/api/gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: `Current dashboard: ${totalAttendance} attendance, Metro delayed 8 mins. Give 1 sentence operational recommendation.`,
-          context: 'organizer', language: 'en', type: 'crowd',
-        }),
+      const result = await request({
+        message: `Current dashboard: ${totalAttendance} attendance, Metro delayed 8 mins. Give 1 sentence operational recommendation.`,
+        context: 'organizer',
+        language: 'en',
+        type: 'crowd',
       });
-      const data = await res.json();
-      setAiAlert(data.response);
+      if (result) setAiAlert(result);
     } catch {
-      setAiAlert('AI service unavailable.');
-    } finally {
-      setAiLoading(false);
+      setAiAlert('AI service temporarily unavailable.');
     }
   };
 
@@ -99,7 +104,7 @@ export default function LiveDashboard() {
               <div className="font-mono text-2xl font-bold text-black" suppressHydrationWarning>{time.toLocaleTimeString('en-US')}</div>
               <div className="font-mono text-xs text-neutral-500 mt-1 uppercase" suppressHydrationWarning>{time.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
               <div className="flex items-center gap-2 mt-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" aria-hidden="true"></div>
                 <span className="font-mono text-[10px] uppercase text-green-600 font-bold tracking-widest">Live System Active</span>
               </div>
             </div>
@@ -146,8 +151,15 @@ export default function LiveDashboard() {
                     {aiLoading ? 'Analyzing...' : 'Refresh'}
                   </button>
                 </div>
-                <div className="bg-white p-4 border monad-border rounded text-sm text-black min-h-20">
-                  {aiAlert || 'Click refresh to analyze current dashboard metrics and generate an operational strategy.'}
+                <div role="status" aria-live="polite" className="bg-white p-4 border monad-border rounded text-sm text-black min-h-20">
+                  {aiLoading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 border-2 border-black border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+                      Analyzing dashboard metrics...
+                    </div>
+                  ) : (
+                    aiAlert || 'Click refresh to analyze current dashboard metrics and generate an operational strategy.'
+                  )}
                 </div>
               </div>
 

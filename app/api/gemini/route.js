@@ -1,10 +1,47 @@
 import { NextResponse } from 'next/server';
 import { getGeminiClient, buildPrompt, validateRequestInput } from '@/lib/gemini';
 
+// In-memory rate limiter: 10 req/min per IP
+const rateMap = new Map();
+function isRateLimited(ip) {
+  const now = Date.now();
+  const windowMs = 60_000; // 1 minute
+  const limit = 10;
+  const entry = rateMap.get(ip) ?? { count: 0, start: now };
+
+  if (now - entry.start > windowMs) {
+    rateMap.set(ip, { count: 1, start: now });
+    return false;
+  }
+  if (entry.count >= limit) return true;
+  rateMap.set(ip, { count: entry.count + 1, start: entry.start });
+  return false;
+}
+
+const ALLOWED_ORIGINS = [
+  'https://fifa-2026-463939132351.us-central1.run.app',
+  'http://localhost:3000',
+];
+
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
+  const requestId = crypto.randomUUID();
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+
+  // CORS check in production
+  const origin = req.headers.get('origin') ?? '';
+  if (process.env.NODE_ENV === 'production' && !ALLOWED_ORIGINS.includes(origin)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
+  // Rate limiting
+  if (isRateLimited(ip)) {
+    console.warn('[gemini-api] Rate limited', { requestId, ip });
+    return NextResponse.json({ error: 'Too many requests. Please wait.' }, { status: 429 });
+  }
+
   try {
     const contentType = req.headers.get('content-type') || '';
     if (!contentType.includes('application/json')) {
@@ -24,15 +61,11 @@ export async function POST(req) {
     }
 
     const { message, context, language, type } = validation.value;
+    console.log('[gemini-api]', { requestId, ip, context, type, messageLength: message.length });
 
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json({
-        response: `[DEMO MODE — No API Key] 🤖 StadiumIQ AI would respond to your query about "${message.substring(0, 60)}${message.length > 60 ? '...' : ''}". 
-
-To enable real AI responses, add your GEMINI_API_KEY to the .env.local file:
-GEMINI_API_KEY=your_google_gemini_api_key_here
-
-Get your free API key at: https://aistudio.google.com/app/apikey`,
+        response: `[DEMO MODE — No API Key] 🤖 StadiumIQ AI would respond to your query about "${message.substring(0, 60)}${message.length > 60 ? '...' : ''}". \n\nTo enable real AI responses, add your GEMINI_API_KEY to the .env.local file.`,
       });
     }
 
@@ -42,13 +75,22 @@ Get your free API key at: https://aistudio.google.com/app/apikey`,
     const response = await ai.models.generateContent({
       model: 'gemini-2.0-flash',
       contents: prompt,
+      safetySettings: [
+        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
+        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      ],
     });
 
-    const text = response.text || '';
+    const raw = response.text || '';
+    
+    // Strip script injection from AI output before sending to client
+    const sanitized = raw.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
 
-    return NextResponse.json({ response: text });
+    return NextResponse.json({ response: sanitized });
   } catch (error) {
-    console.error('Gemini API error', { message: error?.message });
+    console.error('[gemini-api] Error', { requestId, message: error?.message });
 
     if (error?.message?.includes('API_KEY_INVALID') || error?.message?.includes('API key')) {
       return NextResponse.json({
