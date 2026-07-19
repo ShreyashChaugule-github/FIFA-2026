@@ -40,9 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Cloud Run / Docker
-.dockerignore
-Dockerfile
+# Cloud Run / Docker — intentionally tracked for Cloud Build source deploys
+# (Do NOT add Dockerfile or .dockerignore here)
 
 # IDE & OS
 .vscode/
