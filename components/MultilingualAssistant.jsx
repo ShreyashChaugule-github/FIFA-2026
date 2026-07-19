@@ -97,6 +97,7 @@ CULTURAL TIP: [brief tip]`,
                   <button
                     key={lang.code}
                     onClick={() => setTargetLang(lang.code)}
+                    aria-pressed={targetLang === lang.code}
                     className={`text-left px-4 py-3 border monad-border rounded-md font-mono text-sm uppercase transition-colors ${targetLang === lang.code ? 'bg-black text-white border-black' : 'hover:bg-neutral-50 text-neutral-600'}`}
                   >
                     {lang.flag} {lang.native}
@@ -112,6 +113,8 @@ CULTURAL TIP: [brief tip]`,
             {/* Input Area */}
             <div className="p-6 md:p-10 border-b monad-border bg-neutral-50 flex flex-col gap-4">
               <textarea
+                id="translate-input"
+                aria-label="Text to translate"
                 className="w-full bg-white border monad-border rounded-lg p-4 text-black focus:outline-none focus:ring-1 focus:ring-black min-h-[120px] resize-none"
                 value={inputText}
                 onChange={e => setInputText(e.target.value)}
@@ -136,6 +139,7 @@ CULTURAL TIP: [brief tip]`,
                 className="w-full lg:w-auto self-start mt-2 bg-black text-white px-8 py-3 rounded-lg font-mono uppercase text-sm disabled:opacity-50 hover:bg-neutral-800 transition-colors"
                 onClick={() => translate(inputText, targetLang)}
                 disabled={loading || !inputText.trim()}
+                aria-busy={loading}
               >
                 {loading ? 'Translating...' : 'Translate'}
               </button>

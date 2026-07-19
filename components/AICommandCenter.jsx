@@ -66,6 +66,7 @@ export default function AICommandCenter() {
                   <button
                     key={role}
                     onClick={() => { setContext(role); setMessages([{ role: 'assistant', text: `Context switched to ${role.toUpperCase()}. How can I help you?` }]); }}
+                    aria-pressed={context === role}
                     className={`text-left px-4 py-3 rounded-md font-mono uppercase text-sm border transition-all ${context === role ? 'border-black bg-black text-white' : 'border-neutral-200 text-black hover:bg-neutral-50'}`}
                   >
                     {role} View
@@ -112,6 +113,8 @@ export default function AICommandCenter() {
               <div className="flex gap-3">
                 <input
                   type="text"
+                  id="ai-message-input"
+                  aria-label="Ask the AI anything..."
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleSend(input)}
@@ -121,6 +124,7 @@ export default function AICommandCenter() {
                 <button
                   onClick={() => handleSend(input)}
                   disabled={loading || !input.trim()}
+                  aria-busy={loading}
                   className="bg-black text-white px-6 py-3 rounded-lg font-mono uppercase text-sm disabled:opacity-50 hover:bg-neutral-800 transition-colors"
                 >
                   Send

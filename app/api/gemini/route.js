@@ -39,12 +39,12 @@ Get your free API key at: https://aistudio.google.com/app/apikey`,
     const ai = getGeminiClient();
     const prompt = buildPrompt({ message, context, language, type });
 
-    const interaction = await ai.interactions.create({
+    const response = await ai.models.generateContent({
       model: 'gemini-2.0-flash',
-      input: prompt,
+      contents: prompt,
     });
 
-    const text = interaction.output_text || '';
+    const text = response.text || '';
 
     return NextResponse.json({ response: text });
   } catch (error) {

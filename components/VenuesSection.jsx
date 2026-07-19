@@ -9,7 +9,7 @@ const VENUES = [
     country: 'USA',
     capacity: 82500,
     matches: 8,
-    image: 'https://digitalhub.fifa.com/transform/0d90e4f5-db7c-4afc-9be7-2938c19e8428/2026-FWC-Stadiums-MetLife',
+    image: '/venues/metlife.jpg',
     highlight: 'FINAL HOST',
   },
   {
@@ -18,7 +18,7 @@ const VENUES = [
     country: 'USA',
     capacity: 70240,
     matches: 6,
-    image: 'https://digitalhub.fifa.com/transform/c28fe48d-4e5d-4d0e-9be9-8a6b6d7b1d2c/2026-FWC-Stadiums-SoFi',
+    image: '/venues/sofi.jpg',
     highlight: 'SEMIFINAL',
   },
   {
@@ -27,7 +27,7 @@ const VENUES = [
     country: 'USA',
     capacity: 80000,
     matches: 7,
-    image: 'https://digitalhub.fifa.com/transform/b3e6c5a4-7d8e-4f9b-a1c2-3e5f6g7h8i9j/2026-FWC-Stadiums-ATT',
+    image: '/venues/att.jpg',
     highlight: 'QUARTERFINAL',
   },
   {
@@ -36,7 +36,7 @@ const VENUES = [
     country: 'MEX',
     capacity: 87523,
     matches: 6,
-    image: 'https://digitalhub.fifa.com/transform/d3e4f5g6-h7i8-9012-jklm-345678901bcd/2026-FWC-Stadiums-Azteca',
+    image: '/venues/azteca.jpg',
     highlight: 'OPENING MATCH',
   }
 ];

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test --experimental-default-type=module"
+    "test": "node --import ./tests/register.js --test --experimental-default-type=module"
   },
   "dependencies": {
     "@google/genai": "^2.12.0",

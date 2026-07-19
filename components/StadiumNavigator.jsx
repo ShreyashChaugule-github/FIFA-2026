@@ -127,18 +127,28 @@ export default function StadiumNavigator() {
   // Get AI walking directions + fly camera
   const handleHotspotSelect = async (hotspot) => {
     setActiveHotspot(hotspot.id);
+    flyToHotspot(hotspot);
+
+    if (hotspot.id === 'overview') {
+      setNavInstructions('Viewing the full 3D overview of the stadium.\nSelect a destination above to see step-by-step walking directions.');
+      return;
+    }
+
     setAiLoading(true);
     setNavInstructions('');
-
-    // Fly camera in the 3D viewer
-    flyToHotspot(hotspot);
 
     try {
       const res = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: `Provide exactly 3 extremely short bulleted walking directions to the ${hotspot.name}. MAXIMUM 8 WORDS PER BULLET. NO INTRO OR OUTRO TEXT.`,
+          message: `Generate exactly 3 short bulleted walking directions from the Main Gates (A-D) to the ${hotspot.name} using this stadium layout:
+- Main Gates (A-D) are at Ground Level, East Concourse.
+- Medical Center is at Ground Level, West Concourse (directly opposite the Main Gates).
+- Concessions are at Level 2, North Concourse (turn right from gates, go to Section 130, take Escalator 3 up).
+- VIP Entrance is at Ground Level, South Concourse (turn left from gates, walk past Section 102).
+- Merchandise is at Level 2, East Concourse (take the East Escalator near Gate B up to Level 2).
+MAXIMUM 8 WORDS PER BULLET. NO INTRO OR OUTRO TEXT.`,
           context: 'fan',
           language: 'en',
           type: 'navigation',
@@ -185,6 +195,7 @@ export default function StadiumNavigator() {
                   key={h.id}
                   onClick={() => handleHotspotSelect(h)}
                   disabled={!viewerReady}
+                  aria-pressed={activeHotspot === h.id}
                   className={`text-left px-4 py-3 border monad-border rounded-md font-mono text-sm uppercase flex items-center gap-3 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
                     activeHotspot === h.id
                       ? 'bg-black text-white border-black'

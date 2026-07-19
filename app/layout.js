@@ -7,7 +7,24 @@ const robotoMono = Roboto_Mono({ subsets: ['latin'], variable: '--font-roboto-mo
 
 export const metadata = {
   title: 'StadiumIQ | FIFA World Cup 2026',
-  description: 'The High-Performance AI Stadium Intelligence Platform.',
+  description: 'AI-powered stadium intelligence for FIFA World Cup 2026 fans, organizers, volunteers, and staff.',
+  keywords: ['FIFA 2026', 'stadium intelligence', 'AI assistant', 'event operations', 'fan experience'],
+  applicationName: 'StadiumIQ',
+  authors: [{ name: 'StadiumIQ Team' }],
+  openGraph: {
+    title: 'StadiumIQ | FIFA World Cup 2026',
+    description: 'AI-powered stadium intelligence for FIFA World Cup 2026 fans, organizers, volunteers, and staff.',
+    type: 'website',
+    url: 'https://example.com',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'StadiumIQ | FIFA World Cup 2026',
+    description: 'AI-powered stadium intelligence for FIFA World Cup 2026 fans, organizers, volunteers, and staff.',
+  },
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({ children }) {
