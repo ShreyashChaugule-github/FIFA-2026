@@ -35,3 +35,15 @@ test('buildPrompt includes normalized instructions', () => {
   assert.match(prompt, /REQUEST TYPE: wayfinding/);
   assert.match(prompt, /Help me reach gate A/);
 });
+
+test('buildPrompt strengthens safety guidance for operational requests', () => {
+  const prompt = buildPrompt({
+    message: 'Need urgent assistance near a spill',
+    context: 'staff',
+    language: 'en',
+    type: 'incident',
+  });
+
+  assert.match(prompt, /SAFETY PRIORITY/i);
+  assert.match(prompt, /actionable/i);
+});

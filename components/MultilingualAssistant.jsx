@@ -81,7 +81,7 @@ CULTURAL TIP: [brief tip]`,
         <div className="flex flex-col lg:flex-row border-x border-t monad-border bg-white">
           
           {/* Left: Sticky Sidebar */}
-          <div className="w-full lg:w-1/3 lg:sticky lg:top-[60px] h-auto lg:h-[calc(100vh-60px)] p-6 md:p-10 border-b lg:border-b-0 lg:border-r monad-border flex flex-col justify-between">
+          <div className="w-full lg:w-1/3 lg:sticky lg:top-15 h-auto lg:h-[calc(100vh-60px)] p-6 md:p-10 border-b lg:border-b-0 lg:border-r monad-border flex flex-col justify-between">
             <div>
               <div className="font-mono text-xs uppercase text-neutral-400 mb-6">/ LinguaMatch AI</div>
               <h2 className="text-4xl font-bold text-black mb-4 tracking-tight">
@@ -115,7 +115,7 @@ CULTURAL TIP: [brief tip]`,
               <textarea
                 id="translate-input"
                 aria-label="Text to translate"
-                className="w-full bg-white border monad-border rounded-lg p-4 text-black focus:outline-none focus:ring-1 focus:ring-black min-h-[120px] resize-none"
+                className="w-full bg-white border monad-border rounded-lg p-4 text-black focus:outline-none focus:ring-1 focus:ring-black min-h-30 resize-none"
                 value={inputText}
                 onChange={e => setInputText(e.target.value)}
                 placeholder="Type something to translate..."
@@ -124,6 +124,7 @@ CULTURAL TIP: [brief tip]`,
                 {QUICK_PHRASES.map((phrase, i) => (
                   <button 
                     key={i}
+                    type="button"
                     onClick={() => {
                       setActivePhrase(i);
                       setInputText(phrase.en);
@@ -136,6 +137,7 @@ CULTURAL TIP: [brief tip]`,
                 ))}
               </div>
               <button
+                type="button"
                 className="w-full lg:w-auto self-start mt-2 bg-black text-white px-8 py-3 rounded-lg font-mono uppercase text-sm disabled:opacity-50 hover:bg-neutral-800 transition-colors"
                 onClick={() => translate(inputText, targetLang)}
                 disabled={loading || !inputText.trim()}

@@ -11,10 +11,10 @@ export default function AICommandCenter() {
   const scrollRef = useRef(null);
 
   const SUGGESTIONS = {
-    fan: ['Where is Gate C?', 'What food is near Section 120?', 'When does the match start?'],
-    organizer: ['Show me crowd density at Gate B', 'Status of Metro Line 4?', 'Deploy medical to Section 200'],
-    volunteer: ['Where is my zone?', 'How do I request a break?', 'Translate "Where is the bathroom?" to Spanish'],
-    staff: ['Report a spill at Concession 4', 'Show evacuation route A', 'Security status update'],
+    fan: ['Where is Gate C for accessibility?', 'What food is near Section 120?', 'How do I reach the metro entrance fastest?'],
+    organizer: ['Show me crowd density at Gate B', 'Status of Metro Line 4 for peak exit flow?', 'Deploy medical to Section 200 and alert volunteers'],
+    volunteer: ['Where is my zone and nearest exit?', 'How do I request a break safely?', 'Translate "Where is the bathroom?" to Spanish'],
+    staff: ['Report a spill at Concession 4', 'Show evacuation route A for this section', 'Security status update and incident escalation'],
   };
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function AICommandCenter() {
                 Intelligence on Demand
               </h2>
               <p className="text-neutral-500 text-lg mb-8">
-                Select your role to configure the Gemini AI for customized stadium intelligence.
+                Select your role to configure Gemini for real-time navigation, crowd control, accessibility, multilingual support, and operational decision support.
               </p>
 
               <div className="flex flex-col gap-2 mb-8">
