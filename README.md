@@ -1,119 +1,363 @@
-# 🏟️ StadiumIQ — FIFA World Cup 2026 AI Assistant
+# StadiumIQ 🏟️⚽
 
-![StadiumIQ Banner](public/hero.jpg)
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase-Authentication-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![Gemini AI](https://img.shields.io/badge/Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-4-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![FIFA 2026](https://img.shields.io/badge/FIFA-World%20Cup%202026-005EB8?style=for-the-badge&logo=fifa&logoColor=white)](https://www.fifa.com/)
 
-**StadiumIQ** is a comprehensive, GenAI-powered platform designed to enhance the FIFA World Cup 2026 stadium experience. It unifies intelligent wayfinding, multilingual support, crowd analytics, and operational management into a single, accessible interface built for all tournament stakeholders.
-
----
-
-## 🎯 Problem Statement Alignment
-
-Managing a global mega-event across 16 venues requires unprecedented operational intelligence. **StadiumIQ directly solves this challenge by serving four distinct audience types (Fans, Organizers, Volunteers, Staff)** through context-aware AI. 
-
-Whether it's translating a medical request for a fan in Arabic, guiding a volunteer on crowd protocols, rendering a 3D stadium map with AI walking directions, or automatically generating emergency response protocols, StadiumIQ acts as the central nervous system for the World Cup.
+> **StadiumIQ** is an AI-powered stadium intelligence platform designed for the **FIFA World Cup 2026**, providing fans, volunteers, organizers, and stadium staff with multilingual assistance, smart navigation, venue insights, and real-time operational support through Google Gemini AI.
 
 ---
 
-## 🚀 Live Demo
-**Cloud Run Deployment:** [https://fifa-2026-463939132351.us-central1.run.app](https://fifa-2026-463939132351.us-central1.run.app)
+# 📁 Project Summary
 
-*(Note: Requires `GEMINI_API_KEY` in environment variables for live AI features, otherwise runs in Demo Mode).*
+- **Purpose:** Enhance the FIFA World Cup stadium experience using AI-powered assistance, intelligent navigation, and live venue operations.
+- **Audience:** Football fans, stadium visitors, volunteers, organizers, and event staff.
+- **Structure:** Next.js App Router frontend with Firebase Authentication, Gemini AI integration, and modern React architecture.
 
 ---
 
-## 🧠 System Architecture
+# 🚀 Key Features
+
+- 🤖 AI Stadium Assistant powered by Google Gemini
+- 🏟️ Interactive Stadium & Venue Explorer
+- 🧭 Smart Stadium Navigator
+- 🌍 Multilingual AI Support
+- 📊 Live Operations Dashboard
+- 🚇 Transport & Route Guidance
+- 🚨 Crowd Awareness & Stadium Alerts
+- 👥 Role-based Experience (Fans, Volunteers, Staff & Organizers)
+- 🔐 Firebase Authentication
+- 📱 Responsive Mobile-first Interface
+
+---
+
+# 🧭 Approach & Logic
+
+1. Secure authentication using Firebase Authentication.
+2. Personalized AI assistance based on user role.
+3. Intelligent navigation across stadiums and venues.
+4. Gemini generates contextual recommendations and answers.
+5. Dashboard displays live operational insights for better crowd management.
+6. Modern responsive UI optimized for desktop and mobile.
+
+---
+
+# ⚙️ How the Solution Works
+
+1. User signs in using Firebase Authentication.
+2. User selects their role (Fan, Staff, Volunteer, Organizer).
+3. Next.js frontend communicates with AI services.
+4. Gemini processes requests securely.
+5. AI returns multilingual recommendations, navigation guidance, and venue intelligence.
+6. Dashboard continuously updates operational information.
+
+---
+
+# 🗺️ Architecture
 
 ```mermaid
 graph TD
-    A[Client UI - React 19] --> B[Next.js App Router]
-    A --> C[Context API / Auth]
-    
-    B --> D[API Routes]
-    D --> E[Gemini 2.0 Flash API]
-    
-    C --> F[Firebase Auth]
-    
-    A --> G[Interactive 3D Viewer]
-    A --> H[Live Analytics Dashboard]
-    
-    subgraph AI Features
-    E --> I[Translation & Phonetics]
-    E --> J[Emergency Protocols]
-    E --> K[Operational Recommendations]
-    E --> L[Spatial Wayfinding]
+
+    User[Fan / Staff / Volunteer / Organizer]
+
+    subgraph Frontend
+        UI[Next.js 16 + React 19]
+        Dashboard[Live Dashboard]
+        Navigator[Smart Navigator]
+        Explorer[Venue Explorer]
+        AIUI[AI Command Center]
     end
+
+    subgraph Authentication
+        Firebase[Firebase Authentication]
+    end
+
+    subgraph AI Layer
+        Gemini[Google Gemini AI]
+        Prompt[Prompt Validation]
+    end
+
+    User --> Firebase
+    Firebase --> UI
+
+    UI --> Dashboard
+    UI --> Navigator
+    UI --> Explorer
+    UI --> AIUI
+
+    AIUI --> Gemini
+    Gemini --> Prompt
+    Prompt --> AIUI
+
+    AIUI --> User
 ```
 
 ---
 
-## 🌟 Core Features (10 Modules)
+# 🧩 Code Flow
 
-1. **AI Command Center:** Context-aware chat (Fan, Organizer, Staff, Volunteer) powered by Gemini 2.0 Flash.
-2. **Interactive 3D Navigator:** Real-time spatial mapping with Sketchfab Viewer API and AI-generated turn-by-turn walking directions.
-3. **Multilingual LinguaMatch:** Translates 7+ languages, provides phonetic guides, and offers contextual cultural tips.
-4. **Live Crowd Dashboard:** Real-time mock metrics on attendance, transit, and weather, coupled with AI operational strategy generation.
-5. **Emergency SOS System:** Generates instant, 3-step actionable protocols for Medical, Security, Fire, and Accessibility incidents.
-6. **Volunteer Shift Hub:** Manages shift schedules and provides AI-generated role briefings and safety tips.
-7. **Match Intelligence Schedule:** Displays all 104 matches, live scores, and generates AI-powered travel/transit tips per match.
-8. **Venue Explorer:** Highlights all 16 official FIFA venues with AI-generated fast facts.
-9. **Role-Based Authentication:** Secured by Firebase, determining default context and dashboard layouts.
-10. **Resilient Architecture:** Implements React `lazy()` loading, `Suspense` streaming, and `ErrorBoundary` fallback UIs.
+```mermaid
+flowchart TD
 
----
+Developer --> Next[Next.js Dev Server]
 
-## 🛡️ Security Model
+Next --> AppRouter[App Router]
 
-- **Rate Limiting:** In-memory sliding window preventing abuse (10 req/min per IP).
-- **AI Safety Settings:** Configured Gemini API filters blocking harassment, hate speech, and dangerous content at `BLOCK_MEDIUM_AND_ABOVE`.
-- **Input Sanitization:** Strips script injections from AI outputs before rendering.
-- **Request Correlation ID:** Tracks requests via UUID for forensic auditing.
-- **Server-Side Key Isolation:** `GEMINI_API_KEY` is completely isolated in Node.js runtime and never exposed to the client bundle.
+AppRouter --> Components[React Components]
+
+Components --> Firebase[Firebase Authentication]
+
+Components --> AI[Gemini API]
+
+AI --> Response[AI Response]
+
+Response --> UI[Dynamic User Interface]
+```
 
 ---
 
-## ⚡ Efficiency & Performance
+# 🛠️ Tech Stack
 
-- **Code Splitting:** Heavy modules (3D Navigator, Dashboards) are lazy-loaded via `React.lazy()` cutting initial JS payload by >60%.
-- **Memoization:** Aggressive use of `useMemo` and `useCallback` to prevent unnecessary component re-renders.
-- **Request Cancellation:** Custom `useGeminiRequest` hook uses `AbortController` to cancel in-flight duplicate fetches.
-- **Next/Image Optimization:** All hero and venue assets utilize WebP/JPEG compression, `priority` hints, and `placeholder="blur"` for CLS prevention.
+### Frontend
+
+- Next.js 16
+- React 19
+- Tailwind CSS
+- TypeScript
+
+### Authentication
+
+- Firebase Authentication
+
+### AI
+
+- Google Gemini API
+
+### Development
+
+- ESLint
+- Node.js
+- npm
+
+### Deployment
+
+- Vercel
+- Firebase Hosting (Optional)
 
 ---
 
-## ♿ Accessibility (WCAG 2.1 AA)
+# 🧭 Quickstart — Local Development
 
-- **Screen Reader Support:** Deep integration of `aria-live="polite"`, `role="log"`, and `role="status"` across all AI outputs and spinners.
-- **Focus Management:** Auto-focuses main content boundary post-login.
-- **Reduced Motion:** Fully respects `prefers-reduced-motion: reduce` OS settings, disabling 3D CSS and CSS transitions.
-- **Semantic HTML:** Strict adherence to `<main>`, `<section>`, and hierarchical heading structures.
+### Prerequisites
 
----
+- Node.js 20+
+- npm
 
-## 🧪 Testing (Vitest)
-
-StadiumIQ is tested using `vitest` and `@testing-library/react`. The suite covers AI hooks, component error boundaries, library logic, and API route security checks.
+Clone the repository
 
 ```bash
-npm run test:vitest
-npm run test:coverage
+git clone https://github.com/yourusername/StadiumIQ.git
+
+cd StadiumIQ
 ```
-*Coverage includes Edge Case simulation, API failure recovery, XSS injection rejection, and Demo Mode validation.*
 
----
+Install dependencies
 
-## 💻 Local Setup
+```bash
+npm install
+```
 
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Setup Firebase: Create a project, enable Email Auth, and configure `.env.local`
-4. Setup Gemini: Get an API key from Google AI Studio
-5. Add `.env.local`:
+Create environment variables
+
+```bash
+cp .env.local.example .env.local
+```
+
+Add your credentials
+
 ```env
-NEXT_PUBLIC_FIREBASE_API_KEY="your_key"
-# ... other firebase vars
-GEMINI_API_KEY="your_gemini_key"
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+
+GEMINI_API_KEY=
 ```
-6. Run server: `npm run dev`
+
+Run development server
+
+```bash
+npm run dev
+```
+
+Visit
+
+```
+http://localhost:3000
+```
 
 ---
-*Built for PromptWars Virtual Challenge 4 — Hack2skill*
+
+# 📦 Production Build
+
+Create production build
+
+```bash
+npm run build
+```
+
+Start production server
+
+```bash
+npm run start
+```
+
+---
+
+# 🚀 Deploy to Vercel
+
+```bash
+npm install -g vercel
+
+vercel
+```
+
+Or connect your GitHub repository directly with **Vercel**.
+
+---
+
+# ✅ Testing
+
+Run lint
+
+```bash
+npm run lint
+```
+
+Run tests
+
+```bash
+npm test
+```
+
+Build verification
+
+```bash
+npm run build
+```
+
+---
+
+# 🔒 Security & Best Practices
+
+- Firebase Authentication for secure login.
+- Environment variables for sensitive credentials.
+- Gemini API key stored server-side.
+- Prompt validation before AI execution.
+- Client-side authentication state management.
+- Production-ready Next.js security headers.
+
+---
+
+# ♿ Accessibility
+
+- Keyboard-friendly navigation.
+- Mobile responsive design.
+- Semantic HTML.
+- Screen reader support.
+- High-contrast accessible UI.
+- Multilingual AI assistance.
+
+---
+
+# 📁 Project Structure
+
+```
+app/
+│
+├── api/
+├── auth/
+├── dashboard/
+├── navigator/
+└── venues/
+
+components/
+│
+├── dashboard/
+├── navigation/
+├── ai/
+└── ui/
+
+context/
+│
+└── AuthContext
+
+lib/
+│
+├── firebase.ts
+├── gemini.ts
+└── utils.ts
+
+public/
+
+tests/
+
+styles/
+```
+
+---
+
+# 📂 Important Files
+
+- `app/` — Next.js App Router
+- `components/` — Reusable UI Components
+- `context/` — Authentication Context
+- `lib/firebase.ts` — Firebase Configuration
+- `lib/gemini.ts` — Gemini AI Integration
+- `tests/` — AI & Application Tests
+
+---
+
+# 🌍 Future Enhancements
+
+- Live Match Analytics
+- Indoor Stadium Maps
+- Real-time Seat Navigation
+- Emergency Assistance
+- AI Voice Assistant
+- Push Notifications
+- QR Ticket Integration
+- Live Crowd Density Heatmaps
+- Public Transport Live Tracking
+- Offline Stadium Mode
+
+---
+
+# ❤️ Built For
+
+**FIFA World Cup 2026**
+
+Empowering every fan, volunteer, organizer, and stadium staff member with AI-powered stadium intelligence.
+
+---
+
+## 📄 License
+
+This project is built for educational, hackathon, and demonstration purposes.
+
+---
+
+<div align="center">
+
+### ⚽ StadiumIQ
+
+### AI-powered Stadium Intelligence for FIFA World Cup 2026
+
+Built with ❤️ using **Next.js • React • Firebase • Google Gemini AI**
+
+</div>
